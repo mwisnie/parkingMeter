@@ -8,33 +8,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = {"/api/spaces/{spaceId}/sessions/", "/api/spaces/{spaceId}/sessions"})
 public class ParkingSessionController {
 
     @Autowired
     private ParkingSessionServiceImpl sessionService;
 
-    @GetMapping
+    @GetMapping(path = {"/api/sessions", "/api/sessions/"})
+    public List<ParkingSession> getAllSessions() {
+        return sessionService.getAllSessions();
+    }
+
+    @GetMapping(path = {"/api/sessions/{id}", "/api/sessions/{id}/"})
+    public ParkingSession getSessionById(@PathVariable("id") Long id) {
+        return sessionService.getSessionById(id);
+    }
+
+    @GetMapping(path = {"/api/spaces/{spaceId}/sessions", "/api/spaces/{spaceId}/sessions/"})
     public List<ParkingSession> getAllSessionsForSpace(@PathVariable("spaceId") Long spaceId) {
         return sessionService.getAllSessionsForSpace(spaceId);
     }
 
-    @GetMapping("/{sessionId}")
+    @GetMapping(path = {"/api/spaces/{spaceId}/sessions/{sessionId}", "/api/spaces/{spaceId}/sessions/{sessionId}"})
     public ParkingSession getSessionById(@PathVariable("spaceId") Long spaceId, @PathVariable("sessionId") Long sessionId) {
         return sessionService.getSessionByIdForSpace(spaceId, sessionId);
     }
 
-    @PostMapping
+    @PostMapping(path = {"/api/spaces/{spaceId}/sessions", "/api/spaces/{spaceId}/sessions/"})
     public ParkingSession createSessionForSpace(@PathVariable("spaceId") Long spaceId, @RequestBody ParkingSession session) {
         return sessionService.createSessionForSpace(spaceId, session);
     }
 
-    @PutMapping
+    @PutMapping(path = {"/api/spaces/{spaceId}/sessions", "/api/spaces/{spaceId}/sessions/"})
     public ParkingSession updateSessionForSpace(@PathVariable("spaceId") Long spaceId, @RequestBody ParkingSession session) {
         return sessionService.updateSessionForSpace(spaceId, session);
     }
 
-    @DeleteMapping("/{sessionId}")
+    @DeleteMapping(path = {"/api/spaces/{spaceId}/sessions/{sessionId}", "/api/spaces/{spaceId}/sessions/{sessionId}"})
     public void deleteSessionById(@PathVariable("spaceId") Long spaceId, @PathVariable("sessionId") Long sessionId) {
         sessionService.deleteSessionById(spaceId, sessionId);
     }

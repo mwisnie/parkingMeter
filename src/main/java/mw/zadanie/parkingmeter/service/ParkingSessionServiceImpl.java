@@ -7,6 +7,7 @@ import mw.zadanie.parkingmeter.repository.ParkingSpaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,6 +36,11 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
     }
 
     @Override
+    public List<ParkingSession> getAllSessions() {
+        return sessionRepository.findAll();
+    }
+
+    @Override
     public ParkingSession getSessionById(Long id) {
         return sessionRepository.findById(id).orElse(null);
     }
@@ -43,9 +49,13 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
     public ParkingSession createSessionForSpace(Long spaceId, ParkingSession parkingSession) {
         ParkingSpace space = spaceRepository.findById(spaceId).orElse(null);
         if (space == null) {
+            // todo: detailed exception
             return null;
         }
         parkingSession.setParkingSpace(space);
+        parkingSession.setStartTime(new Date());
+        space.setMeterOn(true);
+        spaceRepository.save(space);
         return sessionRepository.save(parkingSession);
     }
 
@@ -53,6 +63,7 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
     public ParkingSession updateSessionForSpace(Long spaceId, ParkingSession parkingSession) {
         ParkingSpace space = spaceRepository.findById(spaceId).orElse(null);
         if (space == null) {
+            // todo: detailed exception
             return null;
         }
         parkingSession.setParkingSpace(space);
