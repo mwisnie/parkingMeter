@@ -51,14 +51,18 @@ class ParkingSessionControllerSpec extends Specification {
     def "GET with specific id should return ParkingSession instance"() {
         given:
             sessionService.getSessionByIdForSpace(1, 1) >>
-                new ParkingSession.ParkingSessionBuilder().id(1).carId(999).finished(false).build()
+                new ParkingSession.ParkingSessionBuilder()
+                        .id(1)
+                        .carRegistration("12345")
+                        .finished(false)
+                        .build()
         when:
             def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/spaces/1/sessions/1")).andReturn().response
         then:
             response.status == HttpStatus.OK.value()
             with (objectMapper.readValue(response.contentAsString, Map)) {
                 it.id == 1
-                it.carId == 999
+                it.carRegistration == ("12345")
                 it.finished == false
             }
     }
@@ -66,12 +70,18 @@ class ParkingSessionControllerSpec extends Specification {
     def "POST with defined JSON should return ParkingSession instance"() {
         given:
             def requestPayload = """{
-                "carId": 5,
+                "carRegistration": "12345",
                 "finished": false
                 }"""
-            ParkingSession testSessionForStub = new ParkingSession.ParkingSessionBuilder().carId(5).finished(false).build()
+            ParkingSession testSessionForStub = new ParkingSession.ParkingSessionBuilder()
+                    .carRegistration("12345")
+                    .finished(false)
+                    .build()
             sessionService.createSessionForSpace(1, testSessionForStub) >>
-                new ParkingSession.ParkingSessionBuilder().id(1).carId(5).finished(false).build()
+                new ParkingSession.ParkingSessionBuilder()
+                        .id(1)
+                        .carRegistration("12345")
+                        .finished(false).build()
         when:
             def response = mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/spaces/1/sessions/")
@@ -81,7 +91,7 @@ class ParkingSessionControllerSpec extends Specification {
             response.status == 200
             with(objectMapper.readValue(response.contentAsString, Map)) {
                 it.id == 1
-                it.carId == 5
+                it.carRegistration == "12345"
                 it.finished == false
             }
     }
@@ -90,12 +100,20 @@ class ParkingSessionControllerSpec extends Specification {
         given:
             def requestPayload = """{
                 "id": 1,
-                "carId": 5,
+                "carRegistration": "12345",
                 "finished": true
                 }"""
-            ParkingSession testSessionForStub = new ParkingSession.ParkingSessionBuilder().id(1).carId(5).finished(true).build()
+            ParkingSession testSessionForStub = new ParkingSession.ParkingSessionBuilder()
+                    .id(1)
+                    .carRegistration("12345")
+                    .finished(true)
+                    .build()
             sessionService.updateSessionForSpace(1, testSessionForStub) >>
-                new ParkingSession.ParkingSessionBuilder().id(1).carId(5).finished(true).build()
+                new ParkingSession.ParkingSessionBuilder()
+                        .id(1)
+                        .carRegistration("12345")
+                        .finished(true)
+                        .build()
         when:
             def response = mockMvc.perform(MockMvcRequestBuilders
                     .put("/api/spaces/1/sessions/")
@@ -105,7 +123,7 @@ class ParkingSessionControllerSpec extends Specification {
             response.status == 200
             with(objectMapper.readValue(response.contentAsString, Map)) {
                 it.id == 1
-                it.carId == 5
+                it.carRegistration == "12345"
                 it.finished == true
         }
     }

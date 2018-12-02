@@ -49,6 +49,7 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
     public ParkingSession createSessionForSpace(Long spaceId, ParkingSession parkingSession) {
         ParkingSpace space = spaceRepository.findById(spaceId).orElse(null);
         if (space == null) {
+            // space doesn't exist
             // todo: detailed exception
             return null;
         }
@@ -63,11 +64,26 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
     public ParkingSession updateSessionForSpace(Long spaceId, ParkingSession parkingSession) {
         ParkingSpace space = spaceRepository.findById(spaceId).orElse(null);
         if (space == null) {
+            // space doesn't exist
             // todo: detailed exception
             return null;
         }
-        parkingSession.setParkingSpace(space);
-        return sessionRepository.save(parkingSession);
+        ParkingSession currentSession = space.getParkingSessions().stream()
+                .filter(sess -> sess.getId() == parkingSession.getId())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Space doesn't have session with specified id")); // todo: specific exception
+
+        // change only fields present in JSON
+        if (parkingSession.getEndTime() != null) {
+            currentSession.setEndTime((parkingSession.getEndTime()));
+        }
+        if (parkingSession.getCarRegistration() != null) {
+            currentSession.setCarRegistration((parkingSession.getCarRegistration()));
+        }
+        if (parkingSession.getTariff() != null) {
+            currentSession.setTariff((parkingSession.getTariff()));
+        }
+        return sessionRepository.save(currentSession);
     }
 
     @Override

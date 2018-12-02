@@ -18,7 +18,7 @@ class ParkingSessionRepositorySpec extends Specification {
 
     @Shared
     def sampleSession = new ParkingSession.ParkingSessionBuilder()
-            .carId(5)
+            .carRegistration("ABC")
             .build()
 
     def "modifying parkingSpace independently should be visible for binded parkingSession"() {
@@ -65,10 +65,10 @@ class ParkingSessionRepositorySpec extends Specification {
             def savedEntity = sessionRepository.save(sampleSession)
         when:
             def entityFromDb = sessionRepository.findById(savedEntity.getId()).get()
-            entityFromDb.setCarId(1)
+            entityFromDb.setCarRegistration("ABC")
             sessionRepository.save(entityFromDb)
         then:
-            sessionRepository.findById(savedEntity.getId()).get().getCarId() == 1
+            sessionRepository.findById(savedEntity.getId()).get().getCarRegistration() == "ABC"
     }
 
     def "entity should be deleted correctly"() {

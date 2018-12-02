@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = {"/api/spaces", "/api/spaces/"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:4200/"}, maxAge = 3600)
 public class ParkingSpaceController {
 
     @Autowired

@@ -45,7 +45,7 @@ class ParkingSpaceControllerSpec extends Specification {
 
     def "GET with specific id should return ParkingSpace instance / via ResultMatchers"() {
         given:
-            spaceService.getSpaceById(1) >> new ParkingSpace(1, "spaceName", true, null)
+            spaceService.getSpaceById(1) >> new ParkingSpace(1, "spaceName", true, null, null)
         when:
             def result = mockMvc.perform(MockMvcRequestBuilders.get("/api/spaces/1"))
         then:
@@ -57,7 +57,7 @@ class ParkingSpaceControllerSpec extends Specification {
 
     def "GET with specific id should return ParkingSpace instance / Spock way"() {
         given:
-            spaceService.getSpaceById(1) >> new ParkingSpace(1, "spaceName", true, null)
+            spaceService.getSpaceById(1) >> new ParkingSpace(1, "spaceName", true, null, null)
         when:
             def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/spaces/1")).andReturn().response
         then:
@@ -76,7 +76,7 @@ class ParkingSpaceControllerSpec extends Specification {
                 "meterOn": true
                 }"""
             ParkingSpace testSpaceForStub = new ParkingSpace.ParkingSpaceBuilder().name("spaceName2").meterOn(true).build()
-            spaceService.createSpace(testSpaceForStub) >> new ParkingSpace(111, "spaceName2", true, null)
+            spaceService.createSpace(testSpaceForStub) >> new ParkingSpace(111, "spaceName2", true, null, null)
         when:
             def response = mockMvc.perform(MockMvcRequestBuilders
                             .post("/api/spaces/")
@@ -99,7 +99,7 @@ class ParkingSpaceControllerSpec extends Specification {
                     "meterOn": false
                     }"""
             ParkingSpace testSpaceForStub = new ParkingSpace.ParkingSpaceBuilder().id(3).name("changedName").meterOn(false).build()
-            spaceService.updateSpace(testSpaceForStub) >> new ParkingSpace(4, "nameWasChanged", false, null)
+            spaceService.updateSpace(testSpaceForStub) >> new ParkingSpace(4, "nameWasChanged", false, null, null)
         when:
         def response = mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/spaces/")

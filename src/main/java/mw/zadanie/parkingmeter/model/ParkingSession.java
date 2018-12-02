@@ -22,12 +22,19 @@ public class ParkingSession {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     @JsonBackReference
     private ParkingSpace parkingSpace;
-    private Long carId;
+
+    private String carRegistration;
+
+    private DriverType tariff;
+
     private Date startTime;
+
     private Date endTime;
+
     private boolean finished;
 
 }
