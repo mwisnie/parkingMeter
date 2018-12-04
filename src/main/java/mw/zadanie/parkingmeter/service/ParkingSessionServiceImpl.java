@@ -94,7 +94,9 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
                     .filter(sess -> sess.getId().equals(sessionId))
                     .findFirst().orElse(null);
             if (sessionToDelete != null) {
-                sessionRepository.deleteById(sessionId);
+                space.getParkingSessions().remove(sessionToDelete);
+                spaceRepository.save(space);
+                sessionRepository.deleteById(sessionToDelete.getId());
             }
         }
     }

@@ -29,7 +29,7 @@ public class ParkingSpace {
     private String isChangingMeter;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "parkingSpace")
+    @OneToMany(mappedBy = "parkingSpace", cascade = CascadeType.ALL)
     private List<ParkingSession> parkingSessions;
 
     public void addSession(ParkingSession session) {
